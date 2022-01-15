@@ -1,5 +1,5 @@
 //jshint maxerr:1000
-// https://github.com/Devil-of-Chaos/homematic_verbrauchszaehler
+// https://github.com/hdering/homematic_stromverbrauch_protokollieren
 
 //----------------------------------------------------------------------------//
 
@@ -12,7 +12,7 @@
 // +++++++++  USER CONFIG ++++++++++++++++++++++++
 
 // debug logging
-var logging = false;
+var logging = true;
 
 // activate hitsory instance
 var enableHistory = false;
@@ -21,10 +21,10 @@ var enableHistory = false;
 var historyInstance = 'history.0';
 
 // devices can have different prices
-var enableDifferentPrices = false;
+var enableDifferentPrices = true;
 
 // include base price
-var enableIncludeBasePrice = false;
+var enableIncludeBasePrice = true;
 
 // enable factor
 var enableFactor = true;
@@ -381,7 +381,6 @@ function run(obj, alias, unit) {
 			var _pathWorkingPrice = pathInstance + '.' + pathPrice + '.' + pathCurrent + '.' + pathWorkingPrice;
 			var _pathBasePrice = pathInstance + '.' + pathPrice + '.' + pathCurrent + '.' + pathBasePrice;
 			var _pathFactor = pathInstance + '.' + pathPrice + '.' + pathCurrent + '.' + pathFactor;
-			
 			
 			var _counter = (getState(_pathCumulated).val).toFixed(decimalCounterReading);
 			var _workingPrice = getState(_pathWorkingPrice).val;
@@ -772,7 +771,7 @@ function resetConsumptionAndCost(device, cPath) {
 
 function writeCounter(device, cPath) {
 	var _pathCounter = saveInstance + '.' + pathInstance + '.' + device + '.' + pathCounter;
-	setState(_pathCounter, parseFloat( (getState(_pathCounter + '.' + pathCumulated).val).toFixed(decimalCounterReading)));
+	setState(_pathCounter + '.' + _cPath, parseFloat( (getState(_pathCounter + '.' + pathCumulated).val).toFixed(decimalCounterReading)));
 	if (logging) log('meter reading consumption ' + device + ' (' + cPath + ') saved to object');
 }
 
