@@ -543,63 +543,63 @@ function createStates(device, dUnit) {
     
   // device has different price
   if(enableDifferentPrices) {
-    createState(pathInstance + '.' + device + '.' + pathCustomPrice + '.' + pathCurrent + '.' + pathWorkingPrice, { 
+		createState(pathInstance + '.' + device + '.' + pathCustomPrice + '.' + pathCurrent + '.' + pathWorkingPrice, {
 			name: LABEL_PRICE + ' - ' + LABEL_CURRENT + ' ' + LABEL_WORKING_PRICE,
-		  unit: currency + '/' + dUnit,
-		  type: 'number',
-		  def:  0,
-		  min:  0
+			unit: currency + '/' + dUnit,
+			type: 'number',
+			def:  0,
+			min:  0
 		});
-
+		
 		createState(pathInstance + '.' + device + '.' + pathCustomPrice + '.' + pathCurrent + '.' + pathBasePrice,  {
-		  name: LABEL_PRICE + ' - ' + LABEL_CURRENT + ' ' + LABEL_BASE_PRICE,
-		  unit: currency + '/' + LABEL_MONTH,
-		  type: 'number',
-		  def:  0,
-		  min: 0
+			name: LABEL_PRICE + ' - ' + LABEL_CURRENT + ' ' + LABEL_BASE_PRICE,
+			unit: currency + '/' + LABEL_MONTH,
+			type: 'number',
+			def:  0,
+			min: 0
 		});
 		
 		createState(pathInstance + '.' + device + '.' + pathCustomPrice + '.' + pathCurrent + '.' + pathFactor,  {
-		  name: LABEL_PRICE + ' - ' + LABEL_CURRENT + ' ' + LABEL_FACTOR,
-		  type: 'number',
-		  def:  0,
-		  min: 0
+			name: LABEL_PRICE + ' - ' + LABEL_CURRENT + ' ' + LABEL_FACTOR,
+			type: 'number',
+			def:  0,
+			min: 0
 		});
-
+		
 		createState(pathInstance + '.' + device + '.' + pathCustomPrice + '.' + pathNew + '.' + pathWorkingPrice, {
-		  name: LABEL_PRICE + ' - ' + LABEL_NEW + ' ' + LABEL_WORKING_PRICE + ' ' + LABEL_START_DATE,
-		  unit: currency + '/' + dUnit,
-		  type: 'number',
-		  def:  0,
-		  min:  0
+			name: LABEL_PRICE + ' - ' + LABEL_NEW + ' ' + LABEL_WORKING_PRICE + ' ' + LABEL_START_DATE,
+			unit: currency + '/' + dUnit,
+			type: 'number',
+			def:  0,
+			min:  0
 		});
 		
 		createState(pathInstance + '.' + device + '.' + pathCustomPrice + '.' + pathNew + '.' + pathBasePrice,  {
-		  name: LABEL_PRICE + ' - ' + LABEL_NEW + ' ' + LABEL_BASE_PRICE + ' ' + LABEL_START_DATE,
-		  unit: currency + '/' + LABEL_MONTH,
-		  type: 'number',
-		  def:  0,
-		  min: 0
+			name: LABEL_PRICE + ' - ' + LABEL_NEW + ' ' + LABEL_BASE_PRICE + ' ' + LABEL_START_DATE,
+			unit: currency + '/' + LABEL_MONTH,
+			type: 'number',
+			def:  0,
+			min: 0
 		});
 		
 		createState(pathInstance + '.' + device + '.' + pathCustomPrice + '.' + pathNew + '.' + pathFactor,  {
-		  name: LABEL_PRICE + ' - ' + LABEL_NEW + ' ' + LABEL_FACTOR,
-		  type: 'number',
-		  def:  0,
-		  min: 0
+			name: LABEL_PRICE + ' - ' + LABEL_NEW + ' ' + LABEL_FACTOR,
+			type: 'number',
+			def:  0,
+			min: 0
 		});
-
+		
 		createState(pathInstance + '.' + device + '.' + pathCustomPrice + '.' + pathNew + '.' + pathDate,  {                           
-		  name: LABEL_CHANGE_PRICE,
-		  type: 'string',
-		  def: "01.01.1970",
+			name: LABEL_CHANGE_PRICE,
+			type: 'string',
+			def: "01.01.1970",
 		});
 		
 		createState(pathInstance + '.' + device + '.' + pathCustomPrice + '.' + pathNew + '.' + pathChanged, false, {
-		  read: true, 
-		  write: true, 
-		  type: 'boolean', 
-		  def: false
+			read: true, 
+			write: true, 
+			type: 'boolean', 
+			def: false
 		});
   }
     
