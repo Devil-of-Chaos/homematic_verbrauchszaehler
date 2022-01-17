@@ -250,11 +250,11 @@ function calculateCosts(device, counter, price, basePrice, factor) {
 		if(enableIncludeBasePrice && _basePrice > 0) {
 			_basePrice = basePrice * 12 / 365;
 			_basePrice = parseFloat(_basePrice.toFixed(3));
-            _basePriceDay = _basePrice;
-            _basePriceWeek = _basePrice * 7;
-            _basePriceMonth = _basePrice * 30; 
-            _basePriceQuarter = _basePrice * 90;
-            _basePriceYear = _basePrice * 365;
+            		_basePriceDay = _basePrice;
+            		_basePriceWeek = _basePrice * 7;
+            		_basePriceMonth = _basePrice * 30; 
+            		_basePriceQuarter = _basePrice * 90;
+            		_basePriceYear = _basePrice * 365;
 		}
 		
 		
