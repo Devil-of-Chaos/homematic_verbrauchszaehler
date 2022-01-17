@@ -12,7 +12,7 @@
 // +++++++++  USER CONFIG ++++++++++++++++++++++++
 
 // debug logging
-var logging = true;
+var logging = false;
 
 // activate hitsory instance
 var enableHistory = false;
@@ -24,7 +24,7 @@ var historyInstance = 'history.0';
 var enableDifferentPrices = true;
 
 // include base price
-var enableIncludeBasePrice = true;
+var enableIncludeBasePrice = false;
 
 // enable factor
 var enableFactor = true;
@@ -73,7 +73,7 @@ var blacklist = [':1', ':2', ':3', ':4', ':5', ':6', ':7', ':8'];
 //decimal 
 var decimalCost = 2;
 var decimalConsumption = 3;
-var decimalFactor = 3;
+var decimalFactor = 1;
 var decimalCounterReading = 1;
 
 var customData = [
@@ -237,19 +237,26 @@ function calculateCosts(device, counter, price, basePrice, factor) {
 		    + 'This information is mandatory!';
 		log(message, 'error');
 	} else {
+		
+		log(counter + 'counter')
 	
 		var _basePrice = 0;
+		var _basePriceDay = 0;
+		var _basePriceWeek = 0;
+		var _basePriceMonth = 0; 
+		var _basePriceQuarter = 0;
+		var _basePriceYear = 0;
 		
-		if(enableIncludeBasePrice) {
+		if(enableIncludeBasePrice && _basePrice > 0) {
 			_basePrice = basePrice * 12 / 365;
 			_basePrice = parseFloat(_basePrice.toFixed(3));
+            _basePriceDay = _basePrice;
+            _basePriceWeek = _basePrice * 7;
+            _basePriceMonth = _basePrice * 30; 
+            _basePriceQuarter = _basePrice * 90;
+            _basePriceYear = _basePrice * 365;
 		}
 		
-		var _basePriceDay = _basePrice;
-		var _basePriceWeek = _basePrice * 7;
-		var _basePriceMonth = _basePrice * 30; 
-		var _basePriceQuarter = _basePrice * 90;
-		var _basePriceYear = _basePrice * 365;
 		
 		var _pathCosts = saveInstance + '.' + pathInstance + '.' + device + '.' + pathCosts;
 		var _pathConsumption = saveInstance + '.' + pathInstance + '.' + device + '.' + pathConsumption;
@@ -273,7 +280,7 @@ function calculateCosts(device, counter, price, basePrice, factor) {
 		setState(_pathCosts + '.' + pathDay, parseFloat((_counterDay * factor * price + _basePriceDay).toFixed(decimalCost)));
 		setState(_pathCosts + '.' + pathWeek, parseFloat((_counterWeek * factor * price + _basePriceWeek).toFixed(decimalCost)));
 		setState(_pathCosts + '.' + pathMonth, parseFloat((_counterMonth * factor * price + _basePriceMonth).toFixed(decimalCost)));
-		setState(_pathCosts + '.' + pathQuarter, parseFloat((_counterQuarter * factor * price + price + _basePriceQuarter).toFixed(decimalCost)));
+		setState(_pathCosts + '.' + pathQuarter, parseFloat((_counterQuarter * factor * price + _basePriceQuarter).toFixed(decimalCost)));
 		setState(_pathCosts + '.' + pathYear, parseFloat((_counterYear * factor * price + _basePriceYear).toFixed(decimalCost)));
 		if (logging) log('costs (' + device + ') updated');
 	}
@@ -381,6 +388,10 @@ function run(obj, alias, unit) {
 			var _pathWorkingPrice = pathInstance + '.' + pathPrice + '.' + pathCurrent + '.' + pathWorkingPrice;
 			var _pathBasePrice = pathInstance + '.' + pathPrice + '.' + pathCurrent + '.' + pathBasePrice;
 			var _pathFactor = pathInstance + '.' + pathPrice + '.' + pathCurrent + '.' + pathFactor;
+			
+			log('counter' + _pathCumulated);
+			log('counter' + getState(_pathCumulated).val);
+			log('counter' + getState(_pathCumulated).val.toFixed(decimalCounterReading));
 			
 			var _counter = (getState(_pathCumulated).val).toFixed(decimalCounterReading);
 			var _workingPrice = getState(_pathWorkingPrice).val;
@@ -736,25 +747,36 @@ function setRecognizedChange(cPath, period) {
 function rotateConsumptionAndCost(device, cPath, period) {
 	var _pathConsumption = saveInstance + '.' + pathInstance + '.' + device + '.' + pathConsumption + '._' + cPath;
 	var _pathCosts = saveInstance + '.' + pathInstance + '.' + device + '.' + pathCosts + '._' + cPath;
+	var _pathFactor = saveInstance + '.' + pathInstance + '.' + device + '.' + pathFactor + '._' + cPath;
 	
 	if(period > 0) {
 		for(var i = period; i >= 0; i--) {
 			var j = i;
 			j++;
 			// consumption
-			if(getObject(_pathConsumption + '.' + cPath + '_' + j)) {
-				if(i === 0) {
-					setState(_pathConsumption + '.' + cPath + '_' + j, getState(_pathConsumption).val);
-				} else {
-					setState(_pathConsumption + '.' + cPath + '_' + j, getState(_pathConsumption + '.' + cPath + '_' + i).val);
+			if (j <= period) {
+				if(getObject(_pathConsumption + '.' + cPath + '_' + j)) {
+					if(i === 0) {
+						setState(_pathConsumption + '.' + cPath + '_' + j, getState(saveInstance + '.' + pathInstance + '.' + device + '.' + pathConsumption + '.' + cPath).val);
+					} else {
+						setState(_pathConsumption + '.' + cPath + '_' + j, getState(_pathConsumption + '.' + cPath + '_' + i).val);
+					}
 				}
-			}
-			// costs
-			if(getObject(_pathCosts + '.' + cPath + '_' + j)) {
-				if(i === 0) {
-					setState(_pathCosts + '.' + cPath + '_' + j, getState(_pathCosts).val);
-				} else {
-					setState(_pathCosts + '.' + cPath + '_' + j, getState(_pathCosts + '.' + cPath + '_' + i).val);
+				// costs
+				if(getObject(_pathCosts + '.' + cPath + '_' + j)) {
+					if(i === 0) {
+						setState(_pathCosts + '.' + cPath + '_' + j, getState(saveInstance + '.' + pathInstance + '.' + device + '.' + pathCosts + '.' + cPath).val);
+					} else {
+						setState(_pathCosts + '.' + cPath + '_' + j, getState(_pathCosts + '.' + cPath + '_' + i).val);
+					}
+				}
+				// factor
+				if(getObject(_pathFactor + '.' + cPath + '_' + j)) {
+					if(i === 0) {
+						setState(_pathFactor + '.' + cPath + '_' + j, getState(saveInstance + '.' + pathInstance + '.' + device + '.' + pathFactor + '.' + cPath).val);
+					} else {
+						setState(_pathFactor + '.' + cPath + '_' + j, getState(_pathFactor + '.' + cPath + '_' + i).val);
+					}
 				}
 			}
 		}
@@ -764,14 +786,15 @@ function rotateConsumptionAndCost(device, cPath, period) {
 
 function resetConsumptionAndCost(device, cPath) {
 	// reset of the costs for the transferred period
-	setState(saveInstance + '.' + pathInstance + '.' + device + '.' + pathConsumption + '._' + cPath, 0);     
-	setState(saveInstance + '.' + pathInstance + '.' + device + '.' + pathCosts + '._' + cPath, 0);
+	setState(saveInstance + '.' + pathInstance + '.' + device + '.' + pathConsumption + '.' + cPath, 0);     
+	setState(saveInstance + '.' + pathInstance + '.' + device + '.' + pathCosts + '.' + cPath, 0);
+	setState(saveInstance + '.' + pathInstance + '.' + device + '.' + pathFactor + '.' + cPath, 0);
 	if (logging) log('costs and gas consumption for device ' + device + ' (' + cPath + ') reset');
 }
 
 function writeCounter(device, cPath) {
 	var _pathCounter = saveInstance + '.' + pathInstance + '.' + device + '.' + pathCounter;
-	setState(_pathCounter + '.' + _cPath, parseFloat( (getState(_pathCounter + '.' + pathCumulated).val).toFixed(decimalCounterReading)));
+	setState(_pathCounter + '.' + cPath, parseFloat( (getState(_pathCounter + '.' + pathCumulated).val).toFixed(decimalCounterReading)));
 	if (logging) log('meter reading consumption ' + device + ' (' + cPath + ') saved to object');
 }
 
