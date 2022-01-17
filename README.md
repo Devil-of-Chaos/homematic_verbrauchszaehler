@@ -1,12 +1,23 @@
-# homematic_verbrauchszaehler
+# iobroker_verbrauchszaehler
 
 ### Wiki
-https://github.com/hdering/homematic_verbrauchszaehler/wiki/Wiki
+https://github.com/Devil-of-Chaos/iobroker_verbrauchszaehler/wiki
 
 ## TODO
 - Zaehlerstand_letzte_Ablesung und Zaehlerstand_jetzt angeben können
 
 ## Changelog
+
+### 1.5.0 (2021-01-17)
+(Devil-of-Chaos) 
+* Variablen auf camelCase und Englisch übersetzt
+* Instanzpfade selbst Konfigurierbar
+* Entfernung der umrechnung auf Wh
+* Eigener Preis für einzelnen Zähler
+* Feld Faktor ergänzt (umrechnungsfaktor m³ auf kWH bei z.b. Gas, wird nur angelegt wenn gesetzt)
+* Vierte Variable bei eigenen Feldern entfernt
+* Label's für Übersetzungen
+* Variablen werden nun alle vor der verwendung gesetzt
 
 ### 1.3.3 (2018-04-16)
 * (hdering) Wenn Standard Arbeitspreis 0 war, egal ob eigenePreise aktiviert war, wurde Verbrauch und Kosten nicht berechnet
